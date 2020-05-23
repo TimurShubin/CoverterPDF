@@ -11,14 +11,17 @@ import org.apache.pdfbox.rendering.ImageType;
 import org.apache.pdfbox.rendering.PDFRenderer;
 import org.apache.pdfbox.tools.imageio.ImageIOUtil;
 
+import com.converter.models.Link;
+import com.converter.views.ConverterGUI;
+
 public class FileConverter {
 	
-	private static HashSet<String> files;
+	private static Set<Link> files = new HashSet<>();;
 	private static String path;
 	
 	public static void main(String[] args) throws IOException {
 		SwingUtilities.invokeLater(new Runnable() {
-			public void run() {
+			public void run() {		
 				try {
 					ConverterGUI.initGUI();
 				} catch (IOException e) {
@@ -29,38 +32,40 @@ public class FileConverter {
 	}
 	
 	// проверяет наличие файлов с расширением pdf
-	// добавляет файлы в множество
-	public static void getPathToFiles(String p) throws IOException {
-		files = new HashSet<>();
+	// добавляет файлы в множество files
+	
+	public static Set<Link> getPathToFiles(String p) throws IOException {
 		path = p;
 		File dir = new File(path);
 		if (dir.isDirectory()) {
 			for (File item : dir.listFiles()) {
 				if (item.isDirectory()) {
-					System.out.println(item.getName());
-//					getPathToFiles(item.getName());
+					p = item.getPath();
+					getPathToFiles(p);
 				} else {
 					if (item.getName().substring(item.getName().length() - 3, item.getName().length()).equals("pdf")) {
-						files.add(item.getName() + " \t " + item.length() / 1024 + " kB");
+						Link link = new Link();
+						link.setName(item.getName());
+						link.setSize(item.length() / 1024);
+						files.add(link);
 					}
 				}
 			}
-			displayFiles(files);
 		}
+		return files;
 	}
 	
-	public static void displayFiles(HashSet<String> dFiles) {
+	// метод подгружает файлы на экран
+	
+	public static void displayFiles(Set<Link> dFiles) {
 		ConverterGUI.displayFiles(dFiles);
 	}
 	
 	public static void generateImageFromPDF(String filename, String extension) throws IOException {
-	    File f = new File(filename);
 		PDDocument document = PDDocument.load(new File(filename));
 	    PDFRenderer pdfRenderer = new PDFRenderer(document);
-	    ConverterGUI.checkProgress();
-	    if(f.mkdir())
+	    
 	    for (int page = 0; page < document.getNumberOfPages(); ++page) {
-	    	System.out.print("|");
 	        BufferedImage bim = pdfRenderer.renderImageWithDPI(
 	          page, 150, ImageType.RGB);
 	        ImageIOUtil.writeImage(

@@ -1,4 +1,4 @@
-package com.converter;
+package com.converter.views;
 
 import java.awt.*;
 import java.awt.event.*;
@@ -7,16 +7,22 @@ import java.util.*;
 
 import javax.swing.*;
 
+import com.converter.FileConverter;
+import com.converter.models.Link;
+
 public class ConverterGUI extends JFrame {
 
 	private static final long serialVersionUID = 1L;
 	private static JFrame frame;
+	private static JPanel bgPanel;
 	private static JPanel panel;
-	private static JProgressBar bar;
+	private static JPanel panel2;
+	private static JPanel panel3;
 	
 	public static void initGUI() throws IOException {
 		frame = new JFrame("PDF Converter");
-		frame.setBounds(100, 100, 500, 350);
+		frame.setLocation(250, 150);
+		frame.setSize(500, 350);
 		frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 
 		JLabel label = new JLabel("¬ведите путь к папке с файлами:");
@@ -34,49 +40,69 @@ public class ConverterGUI extends JFrame {
 			public void actionPerformed(ActionEvent e) {
 				String answer = tField.getText();
 				try {
-					FileConverter.getPathToFiles(answer);
+					FileConverter.displayFiles(FileConverter.getPathToFiles(answer)); // <- getPathToFiles()
 				} catch (IOException e1) {
 					e1.printStackTrace();
 				}
 			}
 		});
 		
+		bgPanel = new JPanel();
+		
 		panel = new JPanel(new FlowLayout(FlowLayout.LEFT));
+		panel.setPreferredSize(new Dimension(480,40));
 		panel.add(label);
 		panel.add(tField);
 		panel.add(button);
 		
-		frame.add(panel);
+		panel2 = new JPanel(new BorderLayout());
+		panel2.setPreferredSize(new Dimension(480,250));
+		
+		panel3 = new JPanel(new BorderLayout());
+		
+		JScrollPane scrollPane = new JScrollPane(panel3);
+		scrollPane.setHorizontalScrollBarPolicy(ScrollPaneConstants.HORIZONTAL_SCROLLBAR_NEVER);
+		scrollPane.setVerticalScrollBarPolicy(ScrollPaneConstants.VERTICAL_SCROLLBAR_AS_NEEDED);
+		
+		panel2.add(scrollPane, BorderLayout.CENTER);
+		bgPanel.add(panel);
+		bgPanel.add(panel2);
+		
+		frame.getContentPane().add(bgPanel);
 		frame.setResizable(false);
-		frame.setVisible(true);	
+		frame.setVisible(true);
 	}
 	
-	public static void displayFiles(HashSet<String> files) {
-		int i = 50;
-		for(String file : files) {
-			JLabel label = new JLabel(file);
-			System.out.println(file);
+	public static void displayFiles(Set<Link> files) {
+		
+		int i = 10;
+
+		panel3.revalidate();
+		panel3.setPreferredSize(new Dimension(480, files.size() * 30));
+		
+		for (Link file : files) {
+
+			JLabel label = new JLabel(file.getName());
+
 			label.setBounds(10,i,200,20);
 			label.setLocation(10, i);
 			label.addMouseListener(new MouseAdapter() {
 				public void mouseClicked(MouseEvent e) {
-					if(e.getClickCount() % 2 == 0 && !e.isConsumed()) {
+					if (e.getClickCount() % 2 == 0 && !e.isConsumed()) {
 						try {
+							
 							FileConverter.generateImageFromPDF(FileConverter.getPath() + "/" + label.getText(), ".jpg");
+						
 						} catch (IOException e1) {
 							e1.printStackTrace();
 						}
 					}
 				}
 			});
-			panel.add(label);
+			panel3.add(label);
 			i += 30;
 		}
-		frame.repaint();
+		panel2.repaint();
 	}
 	
-	public static void checkProgress() {
-		
-	}
-
 }
