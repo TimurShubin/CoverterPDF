@@ -7,20 +7,25 @@ import java.util.*;
 
 import javax.swing.*;
 
-import com.converter.FileConverter;
+import com.converter.controllers.TransformationToImage;
 import com.converter.models.Link;
 
 public class ConverterGUI extends JFrame {
 
 	private static final long serialVersionUID = 1L;
+	
 	private static JFrame frame;
 	private static JPanel bgPanel;
 	private static JPanel panel;
 	private static JPanel panel2;
 	private static JPanel panel3;
+	private static JScrollPane scrollPane;
 	
 	public static void initGUI() throws IOException {
+		
 		frame = new JFrame("PDF Converter");
+		ImageIcon icon = new ImageIcon("D:/JAVA/FileConverter/src/com/converter/icon.png");
+		frame.setIconImage(icon.getImage());
 		frame.setLocation(250, 150);
 		frame.setSize(500, 350);
 		frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
@@ -36,15 +41,21 @@ public class ConverterGUI extends JFrame {
 		JButton button = new JButton("найти");
 		button.setBounds(20, 60, 100, 30);
 		button.addActionListener(new ActionListener() {
+			
 			@Override
 			public void actionPerformed(ActionEvent e) {
+			
 				String answer = tField.getText();
+				
 				try {
-					FileConverter.displayFiles(FileConverter.getPathToFiles(answer)); // <- getPathToFiles()
+					
+					TransformationToImage.displayFiles(answer);
+					
 				} catch (IOException e1) {
 					e1.printStackTrace();
 				}
 			}
+			
 		});
 		
 		bgPanel = new JPanel();
@@ -60,7 +71,7 @@ public class ConverterGUI extends JFrame {
 		
 		panel3 = new JPanel(new BorderLayout());
 		
-		JScrollPane scrollPane = new JScrollPane(panel3);
+		scrollPane = new JScrollPane(panel3);
 		scrollPane.setHorizontalScrollBarPolicy(ScrollPaneConstants.HORIZONTAL_SCROLLBAR_NEVER);
 		scrollPane.setVerticalScrollBarPolicy(ScrollPaneConstants.VERTICAL_SCROLLBAR_AS_NEEDED);
 		
@@ -71,28 +82,31 @@ public class ConverterGUI extends JFrame {
 		frame.getContentPane().add(bgPanel);
 		frame.setResizable(false);
 		frame.setVisible(true);
+		
 	}
 	
 	public static void displayFiles(Set<Link> files) {
 		
 		int i = 10;
-
+		
 		panel3.revalidate();
+		panel3.repaint();
+
+		panel3.removeAll();
 		panel3.setPreferredSize(new Dimension(480, files.size() * 30));
 		
 		for (Link file : files) {
 
 			JLabel label = new JLabel(file.getName());
-
+			label.setIcon(new ImageIcon("D:/JAVA/FileConverter/src/com/converter/pdf.png"));
 			label.setBounds(10,i,200,20);
 			label.setLocation(10, i);
 			label.addMouseListener(new MouseAdapter() {
+				
 				public void mouseClicked(MouseEvent e) {
 					if (e.getClickCount() % 2 == 0 && !e.isConsumed()) {
 						try {
-							
-							FileConverter.generateImageFromPDF(FileConverter.getPath() + "/" + label.getText(), ".jpg");
-						
+							TransformationToImage.generateImageFromPDF(label.getText(), ".jpg");
 						} catch (IOException e1) {
 							e1.printStackTrace();
 						}
@@ -104,5 +118,4 @@ public class ConverterGUI extends JFrame {
 		}
 		panel2.repaint();
 	}
-	
 }
