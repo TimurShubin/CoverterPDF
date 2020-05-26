@@ -4,13 +4,12 @@ import java.io.IOException;
 import java.util.*;
 import java.util.concurrent.*;
 
-import com.converter.controllers.TransformationToImage;
 import com.converter.models.Link;
 
 public class PackageUpdater {
 
 	private final ScheduledExecutorService scheduler;
-	private final Map<String, Set<Link>> history = TransformationToImage.history;
+	private final Map<String, Set<Link>> history = FileConverter.history;
 
 	PackageUpdater() {
 		scheduler = Executors.newScheduledThreadPool(1);
@@ -22,15 +21,15 @@ public class PackageUpdater {
 			public void run() {
 				for (Map.Entry<String, Set<Link>> item : history.entrySet()) {
 					try {
-						TransformationToImage.displayFiles(item.getKey());
+						FileConverter.displayFiles(item.getKey());
 					} catch (IOException e) {
 						e.printStackTrace();
 					}
 				}
 			}
 		};
-		
-		final ScheduledFuture<?> updaterHandle = scheduler.scheduleAtFixedRate(updater, 0, 300, TimeUnit.SECONDS);
+		// если файл обрабатываетс€ дольше 5 минут, то таймер будет неверно обновл€ть данные из каталога
+		final ScheduledFuture<?> updaterHandle = scheduler.scheduleAtFixedRate(updater, 0, 60, TimeUnit.SECONDS);
 		scheduler.schedule(new Runnable() {
 			public void run() {
 				updaterHandle.cancel(true);
