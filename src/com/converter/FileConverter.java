@@ -14,26 +14,21 @@ import com.converter.models.Link;
 public class FileConverter {
 
 	public static Map<String, Set<Link>> history = new HashMap<>();
-	private static Set<Link> files = new HashSet<>();
 	private static String path;
-	private static String temp;	
 	
 	public static void main(String[] args) throws IOException {
 
-		Scanner sc = new Scanner(System.in);		
-		if(sc.hasNext()) {
+		Scanner sc = new Scanner(System.in);
+		while(sc.hasNext()) {
 			displayFiles(sc.next());
-			new PackageUpdater();			
+			new PackageUpdater();
 		}
 	}
 
-	// проверяет наличие файлов с расширением *ext*
-	// добавляет файлы в множество files
-	// аргумент ext позволяет искать файлы с разными расширениями
-	//
 	private static Set<Link> getFilesFromPath(String p, String ext) throws IOException {
+		// C:/Users/Lenovo/Desktop/qwe
 		
-		temp = p; // ошибка!
+		Set<Link> files = new HashSet<>();
 		
 		File dir = new File(p);
 		if (dir.isDirectory()) {
@@ -42,15 +37,15 @@ public class FileConverter {
 				if (item.isDirectory()) {	
 					
 					p = item.getPath();
-					getFilesFromPath(p,ext);
+					getFilesFromPath(p, ext);
 					
 				} else {
 					
 					String[] tmp = item.getName().split("\\.");
-					if(tmp.length > 0) {	
+					if (tmp.length > 0) {	
 						if (tmp[tmp.length - 1].equals(ext)) {
 							Link link = new Link();
-							link.setName(item.getName());
+							link.setName(item.getName()); //
 							link.setSize(item.length() / 1024);
 							files.add(link);
 						}
@@ -62,52 +57,75 @@ public class FileConverter {
 		return files;
 	}
 	
-	// метод подгружает файлы на экран
-	// 
 	public static void displayFiles(String p) throws IOException {
-
-		System.out.println("Начало обработки");
-		System.out.println("Создание каталогов JPG");
+		// C:/Users/Lenovo/Desktop/qwe
 
 		if (!history.containsKey(p)) {
+			// In current session Map not created yet,
+			// therefore we can create Map for place Links to files
+			System.out.println("Start processing");
+			System.out.println("Creating JPG directories");
 			path = p;
 			Set<Link> f = getFilesFromPath(p, "pdf");
-			System.out.println("Найдено файлов: " + f.size());
+			System.out.println("Found files: " + f.size());
 			history.put(p, f);
-			handleFiles(f);
+			processFiles(p, f);
 		} else {
-			System.out.println("Найдено файлов: " + history.size());
-			handleFiles(history.get(p));
+			// Map is exist, therefore we can check changes in her
+			// if Map size differs from initial size, then we can compare them
+			Set<Link> f = getFilesFromPath(p, "pdf"); // search to folder
+			if (history.get(p).size() != f.size()) {
+				// perhaps, we found some changes
+				// let's find Sets difference
+				System.out.println("Start processing");
+				
+				if (history.get(p).size() > f.size()) {
+					
+					history.get(p).removeAll(f);
+					processFiles(p, history.get(p));
+				} else {
+					
+					f.removeAll(history.get(p));
+					processFiles(p, f);
+					history.get(p).addAll(f);
+					// C:/Users/Lenovo/Desktop/pdf
+					// C:/Users/Lenovo/Desktop/qwe
+				}
+			}
 		}
 	}
 	
-	public static void handleFiles(Set<Link> files) {
+	public static void processFiles(String p, Set<Link> files) {
 		for (Link file : files) {
 			try {
-				generateImageFromPDF(file.getName(), ".jpg");
+				generateImageFromPDF(p + "/" + file.getName(), ".jpg");
 			} catch (IOException e1) {
 				e1.printStackTrace();
 			}
 		}
-		System.out.println("Обработка завершена");
+		System.out.println("Processing completed");
 	}
 	
 	public static void generateImageFromPDF(String filename, String extension) throws IOException {
-		
-		PDDocument document = PDDocument.load(new File(path + "/" + filename));
+		PDDocument document = PDDocument.load(new File(filename));
 	    PDFRenderer pdfRenderer = new PDFRenderer(document);
 		
-	    System.out.println("Обрабатывается файл " + filename + ": " + document.getNumberOfPages() + " стр.");
-	    
+	    System.out.println("Processing file " + filename + ": " + document.getNumberOfPages() + " pages");
+
+		(new File(path + "/JPG")).mkdir();
+        
+		String inserted = "JPG/"; 
+        int index = filename.lastIndexOf("/");
+        filename = filename.substring(0, index + 1) + inserted + filename.substring(index + 1);
+        
 	    for (int page = 0; page < document.getNumberOfPages(); ++page) {
 	        BufferedImage bim;
-			(new File(path + "/JPG")).mkdir();
 			bim = pdfRenderer.renderImageWithDPI(page, 150, ImageType.RGB);
-			ImageIOUtil.writeImage(bim, String.format(path + "/JPG/%s_%d.%s", filename, page + 1, extension), 150);
+			ImageIOUtil.writeImage(bim, String.format("%s_%d.%s", filename.replace(".pdf", ""), page + 1, extension), 150);
 	    }
 	    document.close();
 	    
-	    System.out.println("Файл " + filename + " обработан.");
+	    System.out.println("File " + filename + " is processed.");
 	}
-
+	
 }

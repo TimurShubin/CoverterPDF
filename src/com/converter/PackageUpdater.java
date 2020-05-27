@@ -28,13 +28,12 @@ public class PackageUpdater {
 				}
 			}
 		};
-		// если файл обрабатываетс€ дольше 5 минут, то таймер будет неверно обновл€ть данные из каталога
-		final ScheduledFuture<?> updaterHandle = scheduler.scheduleAtFixedRate(updater, 0, 60, TimeUnit.SECONDS);
+		final ScheduledFuture<?> updaterHandle = scheduler.scheduleAtFixedRate(updater, 0, 300, TimeUnit.SECONDS);
 		scheduler.schedule(new Runnable() {
 			public void run() {
 				updaterHandle.cancel(true);
 			}
-		}, 60*60, TimeUnit.SECONDS);
+		}, 24*60*60, TimeUnit.SECONDS);
 		
 	}
 }
