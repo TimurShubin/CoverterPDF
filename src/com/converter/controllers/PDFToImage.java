@@ -1,4 +1,4 @@
-package com.converter;
+package com.converter.controllers;
 
 import java.awt.image.BufferedImage;
 import java.io.*;
@@ -9,14 +9,15 @@ import org.apache.pdfbox.rendering.ImageType;
 import org.apache.pdfbox.rendering.PDFRenderer;
 import org.apache.pdfbox.tools.imageio.ImageIOUtil;
 
+import com.converter.PackageUpdater;
 import com.converter.models.Link;
 
-public class FileConverter {
+public class PDFToImage {
 
 	public static Map<String, Set<Link>> history = new HashMap<>();
 	private static String path;
 	
-	public static void main(String[] args) throws IOException {
+	public void init() throws IOException {
 
 		Scanner sc = new Scanner(System.in);
 		while(sc.hasNext()) {
@@ -26,7 +27,6 @@ public class FileConverter {
 	}
 
 	private static Set<Link> getFilesFromPath(String p, String ext) throws IOException {
-		// C:/Users/Lenovo/Desktop/qwe
 		
 		Set<Link> files = new HashSet<>();
 		
@@ -58,7 +58,6 @@ public class FileConverter {
 	}
 	
 	public static void displayFiles(String p) throws IOException {
-		// C:/Users/Lenovo/Desktop/qwe
 
 		if (!history.containsKey(p)) {
 			// In current session Map not created yet,
@@ -73,7 +72,7 @@ public class FileConverter {
 		} else {
 			// Map is exist, therefore we can check changes in her
 			// if Map size differs from initial size, then we can compare them
-			Set<Link> f = getFilesFromPath(p, "pdf"); // search to folder
+			Set<Link> f = getFilesFromPath(p, "pdf");
 			if (history.get(p).size() != f.size()) {
 				// perhaps, we found some changes
 				// let's find Sets difference
@@ -88,8 +87,6 @@ public class FileConverter {
 					f.removeAll(history.get(p));
 					processFiles(p, f);
 					history.get(p).addAll(f);
-					// C:/Users/Lenovo/Desktop/pdf
-					// C:/Users/Lenovo/Desktop/qwe
 				}
 			}
 		}
@@ -99,8 +96,8 @@ public class FileConverter {
 		for (Link file : files) {
 			try {
 				generateImageFromPDF(p + "/" + file.getName(), ".jpg");
-			} catch (IOException e1) {
-				e1.printStackTrace();
+			} catch (IOException ex) {
+				ex.printStackTrace();
 			}
 		}
 		System.out.println("Processing completed");

@@ -4,14 +4,15 @@ import java.io.IOException;
 import java.util.*;
 import java.util.concurrent.*;
 
+import com.converter.controllers.PDFToImage;
 import com.converter.models.Link;
 
 public class PackageUpdater {
 
 	private final ScheduledExecutorService scheduler;
-	private final Map<String, Set<Link>> history = FileConverter.history;
+	private final Map<String, Set<Link>> history = PDFToImage.history;
 
-	PackageUpdater() {
+	public PackageUpdater() {
 		scheduler = Executors.newScheduledThreadPool(1);
 		updatePackages();
 	}
@@ -21,7 +22,7 @@ public class PackageUpdater {
 			public void run() {
 				for (Map.Entry<String, Set<Link>> item : history.entrySet()) {
 					try {
-						FileConverter.displayFiles(item.getKey());
+						PDFToImage.displayFiles(item.getKey());
 					} catch (IOException e) {
 						e.printStackTrace();
 					}
