@@ -22,7 +22,7 @@ public class PackageUpdater {
 			public void run() {
 				for (Map.Entry<String, Set<Link>> item : history.entrySet()) {
 					try {
-						PDFToImage.displayFiles(item.getKey());
+						(new PDFToImage()).displayFiles(item.getKey());
 					} catch (IOException e) {
 						e.printStackTrace();
 					}

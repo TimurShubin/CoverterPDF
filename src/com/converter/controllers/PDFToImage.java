@@ -12,7 +12,7 @@ import org.apache.pdfbox.tools.imageio.ImageIOUtil;
 import com.converter.PackageUpdater;
 import com.converter.models.Link;
 
-public class PDFToImage {
+public class PDFToImage implements PDFInterface {
 
 	public static Map<String, Set<Link>> history = new HashMap<>();
 	private static String path;
@@ -26,7 +26,8 @@ public class PDFToImage {
 		}
 	}
 
-	private static Set<Link> getFilesFromPath(String p, String ext) throws IOException {
+	@Override
+	public Set<Link> getFilesFromPath(String p, String ext) throws IOException {
 		
 		Set<Link> files = new HashSet<>();
 		
@@ -57,11 +58,10 @@ public class PDFToImage {
 		return files;
 	}
 	
-	public static void displayFiles(String p) throws IOException {
+	@Override
+	public void displayFiles(String p) throws IOException {
 
 		if (!history.containsKey(p)) {
-			// In current session Map not created yet,
-			// therefore we can create Map for place Links to files
 			System.out.println("Start processing");
 			System.out.println("Creating JPG directories");
 			path = p;
@@ -70,12 +70,8 @@ public class PDFToImage {
 			history.put(p, f);
 			processFiles(p, f);
 		} else {
-			// Map is exist, therefore we can check changes in her
-			// if Map size differs from initial size, then we can compare them
 			Set<Link> f = getFilesFromPath(p, "pdf");
 			if (history.get(p).size() != f.size()) {
-				// perhaps, we found some changes
-				// let's find Sets difference
 				System.out.println("Start processing");
 				
 				if (history.get(p).size() > f.size()) {
@@ -92,7 +88,8 @@ public class PDFToImage {
 		}
 	}
 	
-	public static void processFiles(String p, Set<Link> files) {
+	@Override
+	public void processFiles(String p, Set<Link> files) {
 		for (Link file : files) {
 			try {
 				generateImageFromPDF(p + "/" + file.getName(), ".jpg");
@@ -104,6 +101,7 @@ public class PDFToImage {
 	}
 	
 	public static void generateImageFromPDF(String filename, String extension) throws IOException {
+		
 		PDDocument document = PDDocument.load(new File(filename));
 	    PDFRenderer pdfRenderer = new PDFRenderer(document);
 		
@@ -116,9 +114,11 @@ public class PDFToImage {
         filename = filename.substring(0, index + 1) + inserted + filename.substring(index + 1);
         
 	    for (int page = 0; page < document.getNumberOfPages(); ++page) {
+	    	
 	        BufferedImage bim;
 			bim = pdfRenderer.renderImageWithDPI(page, 150, ImageType.RGB);
 			ImageIOUtil.writeImage(bim, String.format("%s_%d.%s", filename.replace(".pdf", ""), page + 1, extension), 150);
+
 	    }
 	    document.close();
 	    
