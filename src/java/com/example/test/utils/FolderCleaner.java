@@ -13,7 +13,7 @@ import org.springframework.stereotype.Service;
 @Service
 public class FolderCleaner {
 
-	public volatile Map<String, Long> currentFolders = new ConcurrentHashMap<>();
+	private static volatile Map<String, Long> currentFolders = new ConcurrentHashMap<>();
 	
 	public synchronized Map<String, Long> getCurrentFolders() {
 		return currentFolders;
@@ -27,7 +27,7 @@ public class FolderCleaner {
 	public void startCounter() {
 		Timer timer = new Timer();
 		int begin = 0;
-		int timeInterval = 5000; // check folders every 1 minute
+		int timeInterval = 60000; // check folders every 1 minute
 		
 		timer.schedule(new TimerTask() {
 			@Override
@@ -38,14 +38,17 @@ public class FolderCleaner {
 		}, begin, timeInterval);
 		
 	}
+	
+	private void checkMap(Map<String, Long> m) {
+		m.forEach((p, t) -> removeFolder(p, t));
+	}
 
-	public void removeFolder(String folderPath, Long time) {
+	private void removeFolder(String folderPath, Long time) {
 
-		System.out.println("Attempt removing folders (" + currentFolders.size() + ")");
 		Timestamp timestamp = new Timestamp(System.currentTimeMillis());
 		Long currentTime = timestamp.getTime();
 		   
-		if ((currentTime - time) >= 10000) {
+		if ((currentTime - time) >= 300000) {
 			File index = new File(folderPath);
 			if (index.exists()) {
 				String[] entries = index.list();
@@ -55,6 +58,7 @@ public class FolderCleaner {
 				}
 			}
 			index.delete();
+			currentFolders.remove(folderPath);
 		}
 	}
 
