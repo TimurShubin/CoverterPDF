@@ -106,6 +106,7 @@ public class UploadService implements IUploader {
 	private String zipImages(String path) throws IOException {
 		List<String> srcFiles = getFilesFromPath(path, "jpg");
 		String p = path + "/images_from_pdf.zip";
+		File fi = new File(p);
 		FileOutputStream fos = new FileOutputStream(p);
         ZipOutputStream zipOut = new ZipOutputStream(fos);
         for (String srcFile : srcFiles) {
