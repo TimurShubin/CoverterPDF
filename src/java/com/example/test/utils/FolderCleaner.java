@@ -38,10 +38,6 @@ public class FolderCleaner {
 		}, begin, timeInterval);
 		
 	}
-	
-	private void checkMap(Map<String, Long> m) {
-		m.forEach((p, t) -> removeFolder(p, t));
-	}
 
 	private void removeFolder(String folderPath, Long time) {
 

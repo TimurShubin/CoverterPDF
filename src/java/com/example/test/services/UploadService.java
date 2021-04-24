@@ -86,8 +86,12 @@ public class UploadService implements IUploader {
 	}
 	
 	private void generateImageFromPDF(String file) throws IOException {
+		
+		System.out.println(file);
+		
 		String f = new File(file).getAbsolutePath();
-		PDDocument document = PDDocument.load(new File(f));
+		
+		PDDocument document = PDDocument.load(new File(file));
 		PDFRenderer pdfRenderer = new PDFRenderer(document);
 		System.out.println("Processing file " + file + ": " + document.getNumberOfPages() + " pages");
 		for (int page = 0; page < document.getNumberOfPages(); ++page) {
@@ -140,7 +144,8 @@ public class UploadService implements IUploader {
 		
 		List<String> files = new ArrayList<>();
 		
-		File dir = new File(new File(p).getAbsolutePath());
+		//File dir = new File(new File(p).getAbsolutePath());
+		File dir = new File(p);
 		if (dir.isDirectory()) {
 			for (File item : dir.listFiles()) {
 				if (item.isDirectory()) {	
