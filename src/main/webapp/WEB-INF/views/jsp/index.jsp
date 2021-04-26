@@ -14,18 +14,27 @@
 	<meta name="keywords" content="">
 	<meta name="description" content="">
 	<meta name="author" content="">
-	
-	<link href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css" rel="stylesheet">
+
+	<link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.0/css/bootstrap.min.css">
+	<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css">
+	<script src="https://code.jquery.com/jquery-3.5.1.min.js"></script>
+	<script src="https://cdn.jsdelivr.net/npm/popper.js@1.16.0/dist/umd/popper.min.js"></script>
+	<script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.0/js/bootstrap.min.js"></script>
+
 	<link rel="stylesheet" type="text/css" href="/resources/css/style.css">
 	<link rel="stylesheet" href="/resources/css/responsive.css">
-	<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
 
 </head>
 <body>
 
     <div class="header_section">
       <div class="header_left">
-        
+        <ul class="navbar">
+          <li><button href="#signInModal" class="btn btn-primary btn-sm"data-toggle="modal">Sign In</button></li>
+          <li>API</li>
+          <li>About</li>
+          <li>Contact us</li>
+        </ul> 
         <div class="banner_main">
           <h1 class="banner_taital">CONVERTER <br>PDF to JPEG</h1>
           <p class="banner_text">Load your pdf document and get archive with images.</p>
@@ -63,9 +72,110 @@
       </div>
     </div>
     
+<div id="signInModal" class="modal fade">
+  <div class="modal-dialog" role="document">
+      <div class="modal-content">
+        <div class="modal-header">
+          <ul class="nav nav-tabs md-tabs tabs-2 light-blue darken-3" role="tablist">
+            <li class="nav-item">
+              <a class="nav-link active" data-toggle="tab" href="#panel7" role="tab">Sign In</a>
+            </li>
+            <li class="nav-item">
+              <a class="nav-link" data-toggle="tab" href="#panel8" role="tab">Sign Up</a>
+            </li>
+          </ul>
+        </div>
+        <div class="modal-body">
+          <div class="tab-content">
+
+            <div class="tab-pane fade in show active" id="panel7" role="tabpanel">
+              <form action="#" method="post">
+                  <h3>Sign In form</h3>
+                  <i>Please fill in this form to sign in an account!</i>
+                  <hr>
+                  <div class="form-group">
+                    <div class="input-group">
+                      <div class="input-group-prepend">
+                        <span class="input-group-text">
+                          <i class="fa fa-paper-plane"></i>
+                        </span>                    
+                      </div>
+                      <input type="email" class="form-control" name="email" placeholder="Email Address" required="required">
+                    </div>
+                  </div>
+                  <div class="form-group">
+                    <div class="input-group">
+                      <div class="input-group-prepend">
+                        <span class="input-group-text">
+                          <i class="fa fa-lock"></i>
+                        </span>                    
+                      </div>
+                      <input type="text" class="form-control" name="password" placeholder="Password" required="required">
+                    </div>
+                  </div>
+                  
+                  <div class="form-group">
+                    <input type="submit" class="btn btn-primary btn-block btn-lg" value="Login">
+                  </div>
+                </form>
+            </div>
+            
+            <div class="tab-pane fade" id="panel8" role="tabpanel">
+              <form action="#" method="post">
+                <h3>Sign Up form</h3>
+                <i>Please fill in this form to create an account!</i>
+                <hr>
+                <div class="form-group">
+                  <div class="input-group">
+                    <div class="input-group-prepend">
+                      <span class="input-group-text">
+                        <span class="fa fa-user"></span>
+                      </span>                    
+                    </div>
+                    <input type="text" class="form-control" name="username" placeholder="Username" required="required">
+                  </div>
+                    </div>
+                    <div class="form-group">
+                  <div class="input-group">
+                    <div class="input-group-prepend">
+                      <span class="input-group-text">
+                        <i class="fa fa-paper-plane"></i>
+                      </span>                    
+                    </div>
+                    <input type="email" class="form-control" name="email" placeholder="Email Address" required="required">
+                  </div>
+                    </div>
+                <div class="form-group">
+                  <div class="input-group">
+                    <div class="input-group-prepend">
+                      <span class="input-group-text">
+                        <i class="fa fa-lock"></i>
+                      </span>                    
+                    </div>
+                    <input type="text" class="form-control" name="password" placeholder="Password" required="required">
+                  </div>
+                </div>
+
+                <div class="form-group">
+                  <label class="form-check-label"><input type="checkbox" required="required"> I accept the <a href="#">Terms of Use</a> &amp; <a href="#">Privacy Policy</a></label>
+                </div>
+                <div class="form-group">
+                  <button type="submit" class="btn btn-primary btn-block btn-lg">Sign Up</button>
+                </div>
+              </form>
+            </div>
+
+          </div>
+        </div>
+
+        <div class="modal-footer">
+          <p>Footer</p>
+        </div>
+      </div>
+    </div>
+</div>
     
-	<script type="text/javascript" src="/resources/js/page.js"></script>
-    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.0-beta3/dist/js/bootstrap.bundle.min.js" integrity="sha384-JEW9xMcG8R+pH31jmWH6WWP0WintQrMb4s7ZOdauHnUtxwoG2vI5DkLtS3qm9Ekf" crossorigin="anonymous"></script>
+<script type="text/javascript" src="/resources/js/page.js"></script>
 
 </body>
 </html>
