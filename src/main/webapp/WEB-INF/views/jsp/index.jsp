@@ -18,63 +18,8 @@
 	<link href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css" rel="stylesheet">
 	<link rel="stylesheet" type="text/css" href="/resources/css/style.css">
 	<link rel="stylesheet" href="/resources/css/responsive.css">
-	
 	<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
-	
-	<script type="text/javascript">
-		$(function() {
-		  $('button[type=submit]').click(function(e) {
-		    e.preventDefault();
-		    //Disable submit button
-		    $(this).prop('disabled',true);
-		    
-		    var form = document.forms[0];
-		    var formData = new FormData(form);
 
-		    // Ajax call for file uploaling
-		    var ajaxReq = $.ajax({
-		      url : '/uploadFile',
-		      type : 'POST',
-		      data : formData,
-		      cache : false,
-		      contentType : false,
-		      processData : false,
-		      xhr: function(){
-		        //Get XmlHttpRequest object
-		         var xhr = $.ajaxSettings.xhr() ;
-		        
-		        //Set onprogress event handler 
-		         xhr.upload.onprogress = function(event){
-		          	var perc = Math.round((event.loaded / event.total * 5) * 100);
-		          	$('#progressBar').text(perc + '%');
-		          	$('#progressBar').css('width',perc + '%');
-		         };
-		         return xhr ;
-		    	},
-		    	beforeSend: function( xhr ) {
-		    		//Reset alert message and progress bar
-		    		$('#alertMsg').text('');
-		    		$('#progressBar').text('');
-		    		$('#progressBar').css('width','0%');
-		              }
-		    });
-		  
-		    // Called on success of file upload
-		    ajaxReq.done(function(msg) {
-		      $('#alertMsg').append("<a href='" + msg + "' target='_blank'>Download ZIP</a><br><i>link to download available for 5 minutes</i>");
-		      $('input[type=file]').val('');
-		      $('button[type=submit]').prop('disabled',false);
-		    });
-		    
-		    // Called on failure of file upload
-		    ajaxReq.fail(function(jqXHR) {
-		      $('#alertMsg').text(jqXHR.responseText+'('+jqXHR.status+
-		      		' - '+jqXHR.statusText+')');
-		      $('button[type=submit]').prop('disabled',false);
-		    });
-		  });
-		});
-	</script>
 </head>
 <body>
 
@@ -96,7 +41,18 @@
 		    <div id="alertMsg" style="color: red;font-size: 18px;"></div>
 		    
           	<form:form method="POST" enctype="multipart/form-data" id="form" action="/uploadFile">
-          		<input type="file" name="file" id="filename" accept=".pdf" />
+          	
+	            <div class="box">
+	              <input type="file" name="file" id="file" class="custom-file-input" accept=".pdf">
+	              <label for="file">
+	              	<figure>
+	              		<svg xmlns="http://www.w3.org/2000/svg" width="20" height="17" viewBox="0 0 20 17">
+	              			<path d="M10 0l-5.2 4.9h3.3v5.1h3.8v-5.1h3.3l-5.2-4.9zm9.3 11.5l-3.2-2.1h-2l3.4 2.6h-3.5c-.1 0-.2.1-.2.1l-.8 2.3h-6l-.8-2.2c-.1-.1-.1-.2-.2-.2h-3.6l3.4-2.6h-2l-3.2 2.1c-.4.3-.7 1-.6 1.5l.6 3.1c.1.5.7.9 1.2.9h16.3c.6 0 1.1-.4 1.3-.9l.6-3.1c.1-.5-.2-1.2-.7-1.5z"></path>
+	              		</svg>
+	              	</figure>
+					<span class="preview">Choose a file…</span></label>  
+	            </div>
+          		
           		<button class="more_bt" type="submit">Load PDF</button>
             </form:form>
           </div>
@@ -107,6 +63,8 @@
       </div>
     </div>
     
+    
+	<script type="text/javascript" src="/resources/js/page.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.0-beta3/dist/js/bootstrap.bundle.min.js" integrity="sha384-JEW9xMcG8R+pH31jmWH6WWP0WintQrMb4s7ZOdauHnUtxwoG2vI5DkLtS3qm9Ekf" crossorigin="anonymous"></script>
 
 </body>

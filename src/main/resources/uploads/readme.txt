@@ -1,1 +1,0 @@
-uploads resource folder

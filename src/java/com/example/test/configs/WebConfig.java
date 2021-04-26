@@ -55,5 +55,8 @@ public class WebConfig implements WebMvcConfigurer {
 		registry
 			.addResourceHandler("/resources/images/**")
 			.addResourceLocations("/WEB-INF/resources/images/");
+		registry
+			.addResourceHandler("/resources/js/**")
+			.addResourceLocations("/WEB-INF/resources/js/");
 	}
 }
