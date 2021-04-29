@@ -20,17 +20,11 @@ import org.springframework.web.servlet.view.JstlView;
 @ComponentScan("com.example.test")
 public class WebConfig implements WebMvcConfigurer {
 
-	/*
-	 * MULTIPART UPLOADER SETTINGS
-	 */
 	@Bean
 	public StandardServletMultipartResolver multipartResolver() {
 	    return new StandardServletMultipartResolver();
 	}
 
-	/*
-	 * VIEW SETTINGS
-	 * */
 	@Override
 	public void addViewControllers(final ViewControllerRegistry registry) {
 		registry.addViewController("/").setViewName("index");

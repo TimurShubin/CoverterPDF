@@ -20,6 +20,8 @@
 	<script src="https://code.jquery.com/jquery-3.5.1.min.js"></script>
 	<script src="https://cdn.jsdelivr.net/npm/popper.js@1.16.0/dist/umd/popper.min.js"></script>
 	<script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.0/js/bootstrap.min.js"></script>
+	
+	<script type="text/javascript" src="/resources/js/page.js"></script>
 
 	<link rel="stylesheet" type="text/css" href="/resources/css/style.css">
 	<link rel="stylesheet" href="/resources/css/responsive.css">
@@ -49,7 +51,7 @@
 		    <!-- Alert -->
 		    <div id="alertMsg" style="color: red;font-size: 18px;"></div>
 		    
-          	<form:form method="POST" enctype="multipart/form-data" id="form" action="/uploadFile">
+          	<form:form method="post" id="upload" enctype="multipart/form-data">
           	
 	            <div class="box">
 	              <input type="file" name="file" id="file" class="custom-file-input" accept=".pdf">
@@ -62,7 +64,7 @@
 					<span class="preview">Choose a file…</span></label>  
 	            </div>
           		
-          		<button class="more_bt" type="submit">Load PDF</button>
+          		<button class="more_bt" id="uploadBtn" type="submit">Load PDF</button>
             </form:form>
           </div>
         </div>
@@ -89,7 +91,7 @@
           <div class="tab-content">
 
             <div class="tab-pane fade in show active" id="panel7" role="tabpanel">
-              <form action="#" method="post">
+              <form:form id="signin" method="post">
                   <h3>Sign In form</h3>
                   <i>Please fill in this form to sign in an account!</i>
                   <hr>
@@ -100,7 +102,7 @@
                           <i class="fa fa-paper-plane"></i>
                         </span>                    
                       </div>
-                      <input type="email" class="form-control" name="email" placeholder="Email Address" required="required">
+                      <input type="email" class="form-control" name="username" placeholder="Email Address" required="required">
                     </div>
                   </div>
                   <div class="form-group">
@@ -115,13 +117,13 @@
                   </div>
                   
                   <div class="form-group">
-                    <input type="submit" class="btn btn-primary btn-block btn-lg" value="Login">
+                    <button type="submit" id="signInBtn" class="btn btn-primary btn-block btn-lg">Log in</button>
                   </div>
-                </form>
+                </form:form>
             </div>
             
             <div class="tab-pane fade" id="panel8" role="tabpanel">
-              <form action="#" method="post">
+              <form:form id="signup" method="post">
                 <h3>Sign Up form</h3>
                 <i>Please fill in this form to create an account!</i>
                 <hr>
@@ -160,9 +162,9 @@
                   <label class="form-check-label"><input type="checkbox" required="required"> I accept the <a href="#">Terms of Use</a> &amp; <a href="#">Privacy Policy</a></label>
                 </div>
                 <div class="form-group">
-                  <button type="submit" class="btn btn-primary btn-block btn-lg">Sign Up</button>
+                  <button type="submit" id="signUpBtn" class="btn btn-primary btn-block btn-lg">Sign Up</button>
                 </div>
-              </form>
+              </form:form>
             </div>
 
           </div>
@@ -174,8 +176,6 @@
       </div>
     </div>
 </div>
-    
-<script type="text/javascript" src="/resources/js/page.js"></script>
 
 </body>
 </html>
